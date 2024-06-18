@@ -12,7 +12,7 @@ model Roles {
   roleName  String
   createdOn DateTime @default(now())
   createdBy String
-  staff     Staff[]  @relation("StaffRoles")
+  staff     Staff[]  @relation("Staff")
   Staff     Staff[]
 }
 
