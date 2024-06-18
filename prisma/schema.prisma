@@ -8,12 +8,11 @@ datasource db {
 }
 
 model Roles {
-  id        String   @id @default(uuid())
-  roleName  String
-  createdOn DateTime @default(now())
-  createdBy String
-  staff     Staff[]  @relation("Staff")
-  Staff     Staff[]
+  roleId          String   @id @default(uuid())
+  roleTitle       String
+  roleDescription String
+  createdOn       DateTime @default(now())
+  createdBy       String
 }
 
 model Staff {
@@ -38,10 +37,7 @@ model Staff {
   staffPhoto           String
   username             String   @unique
   password             String
-  roles                String[] // Array of roleId strings
+  roleIds              String[] // Array of roleId strings
   isExpenseApprove     Boolean
   isLoanApprove        Boolean
-  Roles                Roles?   @relation(fields: [rolesId], references: [id])
-  rolesId              String?
-  Roles                Roles?   @relation(fields: [rolesId], references: [id])
 }

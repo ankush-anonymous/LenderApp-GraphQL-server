@@ -1,56 +1,56 @@
 import { PrismaClient } from "@prisma/client";
-
 const prisma = new PrismaClient();
 
 export const resolvers = {
   Query: {
-    getAllRoles: async () => {
-      return prisma.roles.findMany({
-        include: { Staff: true },
-      });
+    getAllRoles: async (_, __, { prisma }) => {
+      return prisma.roles.findMany();
     },
-    getSingleRole: async (_, { id }) => {
+    getSingleRole: async (_, { roleId }, { prisma }) => {
       return prisma.roles.findUnique({
-        where: { id },
-        include: { Staff: true },
+        where: { roleId },
       });
     },
-    getAllStaffs: async () => {
-      return prisma.staff.findMany({
-        include: { role: true },
-      });
+    getAllStaff: async (_, __, { prisma }) => {
+      return prisma.staff.findMany();
     },
-    getSingleStaff: async (_, { id }) => {
+    getSingleStaff: async (_, { id }, { prisma }) => {
       return prisma.staff.findUnique({
         where: { id },
-        include: { role: true },
       });
     },
   },
   Mutation: {
-    createRole: async (_, { roleName, createdBy }) => {
+    createRole: async (
+      _,
+      { roleTitle, roleDescription, createdBy },
+      { prisma }
+    ) => {
       return prisma.roles.create({
         data: {
-          roleName,
+          roleTitle,
+          roleDescription,
           createdBy,
         },
-        include: { Staff: true },
       });
     },
-    updateRole: async (_, { id, roleName, createdBy }) => {
+    updateRole: async (
+      _,
+      { roleId, roleTitle, roleDescription, createdBy },
+      { prisma }
+    ) => {
       return prisma.roles.update({
-        where: { id },
+        where: { roleId },
         data: {
-          roleName,
+          roleTitle,
+          roleDescription,
           createdBy,
         },
-        include: { Staff: true },
       });
     },
-    deleteRole: async (_, { id }) => {
+    deleteRole: async (_, { roleId }, { prisma }) => {
       return prisma.roles.delete({
-        where: { id },
-        include: { Staff: true },
+        where: { roleId },
       });
     },
     createStaff: async (
@@ -75,10 +75,11 @@ export const resolvers = {
         staffPhoto,
         username,
         password,
-        roleId,
+        roleIds,
         isExpenseApprove,
         isLoanApprove,
-      }
+      },
+      { prisma }
     ) => {
       return prisma.staff.create({
         data: {
@@ -101,12 +102,9 @@ export const resolvers = {
           staffPhoto,
           username,
           password,
-          roleId,
+          roleIds,
           isExpenseApprove,
           isLoanApprove,
-        },
-        include: {
-          role: true,
         },
       });
     },
@@ -133,10 +131,11 @@ export const resolvers = {
         staffPhoto,
         username,
         password,
-        roleId,
+        roleIds,
         isExpenseApprove,
         isLoanApprove,
-      }
+      },
+      { prisma }
     ) => {
       return prisma.staff.update({
         where: { id },
@@ -160,19 +159,15 @@ export const resolvers = {
           staffPhoto,
           username,
           password,
-          roleId,
+          roleIds,
           isExpenseApprove,
           isLoanApprove,
         },
-        include: {
-          role: true,
-        },
       });
     },
-    deleteStaff: async (_, { id }) => {
+    deleteStaff: async (_, { id }, { prisma }) => {
       return prisma.staff.delete({
         where: { id },
-        include: { role: true },
       });
     },
   },

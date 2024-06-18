@@ -1,21 +1,12 @@
 -- CreateTable
-CREATE TABLE "UserRights" (
-    "userRightsId" TEXT NOT NULL,
-    "userRightsTitle" TEXT NOT NULL,
-    "userRightsDescription" TEXT NOT NULL,
-    "roleId" INTEGER NOT NULL,
-
-    CONSTRAINT "UserRights_pkey" PRIMARY KEY ("userRightsId")
-);
-
--- CreateTable
 CREATE TABLE "Roles" (
-    "id" SERIAL NOT NULL,
-    "roleName" TEXT NOT NULL,
+    "roleId" TEXT NOT NULL,
+    "roleTitle" TEXT NOT NULL,
+    "roleDescription" TEXT NOT NULL,
     "createdOn" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "createdBy" TEXT NOT NULL,
 
-    CONSTRAINT "Roles_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Roles_pkey" PRIMARY KEY ("roleId")
 );
 
 -- CreateTable
@@ -41,7 +32,7 @@ CREATE TABLE "Staff" (
     "staffPhoto" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "roleId" INTEGER NOT NULL,
+    "roleIds" TEXT[],
     "isExpenseApprove" BOOLEAN NOT NULL,
     "isLoanApprove" BOOLEAN NOT NULL,
 
@@ -53,9 +44,3 @@ CREATE UNIQUE INDEX "Staff_staffCode_key" ON "Staff"("staffCode");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Staff_username_key" ON "Staff"("username");
-
--- AddForeignKey
-ALTER TABLE "UserRights" ADD CONSTRAINT "UserRights_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Roles"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Staff" ADD CONSTRAINT "Staff_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Roles"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
